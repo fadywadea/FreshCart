@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
+import NotFoundImage from "../../Assets/images/error.svg";
 
 export default function Notfound() {
   return (
@@ -13,7 +14,7 @@ export default function Notfound() {
         <title>Not Found</title>
       </Helmet>
       <div>
-        <img src="../../Assets/images/" alt="" />
+        <img src={NotFoundImage} alt="" />
       </div>
     </>
   );

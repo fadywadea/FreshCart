@@ -3,56 +3,62 @@ import { createContext } from "react";
 
 export let CartContext = createContext();
 
-let userToken = localStorage.getItem("userToken");
-let headers = {
-  token: userToken,
+const createAxiosInstance = () => {
+  const token = localStorage.getItem("userToken");
+  return axios.create({
+    baseURL: "https://ecommerce.routemisr.com/api/v1",
+    headers: {
+      token: token,
+    },
+  });
 };
 
+const axiosInstance = createAxiosInstance();
+
 async function addToCart(id) {
-  return axios
-    .post(
-      `https://ecommerce.routemisr.com/api/v1/cart`,
-      {
-        productId: id,
-      },
-      {
-        headers: headers,
-      }
-    )
-    .then((response) => response)
-    .catch((error) => error);
+  try {
+    const response = await axiosInstance.post("/cart", { productId: id });
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
 
 async function getLoggedUserCart() {
-  return axios
-    .get(`https://ecommerce.routemisr.com/api/v1/cart`, {
-      headers: headers,
-    })
-    .then((response) => response)
-    .catch((err) => err);
+  try {
+    const response = await axiosInstance.get("/cart");
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
 
 async function removeCartItem(productId) {
-  return axios
-    .delete(`https://ecommerce.routemisr.com/api/v1/cart/${productId}`, {
-      headers: headers,
-    })
-    .then((response) => response)
-    .catch((error) => error);
+  try {
+    const response = await axiosInstance.delete(`/cart/${productId}`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
+
+async function clearAllItems() {
+  try {
+    const response = await axiosInstance.delete("/cart");
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
 
 async function updateProductQuantity(productId, count) {
-  return axios
-    .put(
-      `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
-      { count: count },
-      { headers: headers }
-    )
-    .then((response) => response)
-    .catch((error) => error);
+  try {
+    const response = await axiosInstance.put(`/cart/${productId}`, { count });
+    return response;
+  } catch (error) {
+    return error;
+  }
 }
-
-
 
 export default function CartContextProvider(props) {
   return (
@@ -62,6 +68,7 @@ export default function CartContextProvider(props) {
         getLoggedUserCart,
         removeCartItem,
         updateProductQuantity,
+        clearAllItems,
       }}
     >
       {props.children}

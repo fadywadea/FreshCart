@@ -1,14 +1,13 @@
-import React from "react";
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 
-export let userContext = createContext();
+export const userContext = createContext();
 
-export default function UserContextProvider(props) {
-  const [userToken, setUserToken] = useState(null);
+export function UserProvider({ children }) {
+  const [userToken, setUserToken] = useState(localStorage.getItem("userToken"));
 
   return (
     <userContext.Provider value={{ userToken, setUserToken }}>
-      {props.children}
+      {children}
     </userContext.Provider>
   );
 }

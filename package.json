@@ -1,12 +1,13 @@
 {
+  "type": "module",
   "name": "finalproject",
   "version": "0.1.0",
-  "homepage": "https://fadywadea.github.io/E-Commerce",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.4.2",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
+    "@fortawesome/fontawesome-free": "^6.6.0",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.0",
     "bootstrap": "^5.3.2",
@@ -54,6 +55,28 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.0.0"
+    "@babel/core": "^7.26.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "@types/react-helmet": "^6.1.11",
+    "babel-jest": "^29.7.0",
+    "gh-pages": "^6.0.0",
+    "jest": "^27.5.1",
+    "jest-environment-jsdom": "^29.7.0",
+    "matchmedia-polyfill": "^0.3.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(js|jsx)$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!axios)"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
   }
 }

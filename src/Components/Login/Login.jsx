@@ -2,43 +2,42 @@ import React, { useState, useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { userContext } from "../../Context/UserContext";
 import { Helmet } from "react-helmet";
 
 export default function Login() {
   let { setUserToken } = useContext(userContext);
-  let navigate = useNavigate();
   const [error, setError] = useState(null);
   const [isLoading, setisLoading] = useState(false);
 
   async function loginSubmit(values) {
     setisLoading(true);
-    let { data } = await axios
-      .post(`https://ecommerce.routemisr.com/api/v1/auth/signin`, values)
-      .catch((err) => {
-        setisLoading(false);
-        setError(err.response.data.message);
-      });
-    if (data.message === "success") {
+    try {
+      let { data } = await axios.post(
+        `https://ecommerce.routemisr.com/api/v1/auth/signin`,
+        values
+      );
+      if (data.message === "success") {
+        localStorage.setItem("userToken", data.token);
+        setUserToken(data.token);
+        window.location.href = "/";
+      }
+    } catch (err) {
+      setError(err.response.data.message);
+    } finally {
       setisLoading(false);
-      localStorage.setItem("userToken", data.token);
-      setUserToken(data.token);
-      navigate("/");
     }
   }
 
-  let validateScheme = Yup.object({
+  const validateScheme = Yup.object({
     email: Yup.string().email("email is invalid").required("email is required"),
     password: Yup.string().required("password is required"),
   });
 
-  let formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
+  const formik = useFormik({
+    initialValues: { email: "", password: "" },
     validationSchema: validateScheme,
     onSubmit: loginSubmit,
   });
@@ -46,19 +45,18 @@ export default function Login() {
   return (
     <>
       <Helmet>
-        <meta name="description" content="Web site created using create-react-app" />
+        <meta
+          name="description"
+          content="Web site created using create-react-app"
+        />
         <meta name="keywords" content="HTML5 CSS3 Bootstrap JS React" />
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <title>Login</title>
       </Helmet>
       <div className="w-75 mx-auto my-5">
-        {error !== null ? (
-          <div className="alert alert-danger">{error}</div>
-        ) : (
-          ""
-        )}
+        {error && <div className="alert alert-danger">{error}</div>}
         <h2 className="title my-4">Login Now</h2>
         <form onSubmit={formik.handleSubmit}>
           <label htmlFor="email">Email:</label>
@@ -71,12 +69,10 @@ export default function Login() {
             name="email"
             type="email"
           />
-          {formik.errors.email && formik.touched.email ? (
+          {formik.errors.email && formik.touched.email && (
             <div className="alert alert-danger mt-2 p-2">
               {formik.errors.email}
             </div>
-          ) : (
-            ""
           )}
           <label htmlFor="password">Password:</label>
           <input
@@ -88,16 +84,17 @@ export default function Login() {
             name="password"
             type="password"
           />
-          {formik.errors.password && formik.touched.password ? (
+          {formik.errors.password && formik.touched.password && (
             <div className="alert alert-danger mt-2 p-2">
               {formik.errors.password}
             </div>
-          ) : (
-            ""
           )}
-          <div className="d-flex algin-items-center forget">
+          <div className="d-flex align-items-center forget">
             {isLoading ? (
-              <button className="btn btn-lg bg-main mt-2 ms-auto text-center">
+              <button
+                aria-busy={isLoading}
+                className="btn btn-lg bg-main mt-2 ms-auto text-center"
+              >
                 <RotatingLines
                   strokeColor="white"
                   strokeWidth="5"
@@ -108,7 +105,10 @@ export default function Login() {
               </button>
             ) : (
               <>
-                <Link className="btn mx-0 me-auto my-auto py-0" to={"/forgotPassword"} >
+                <Link
+                  className="btn mx-0 me-auto my-auto py-0"
+                  to={"/forgotPassword"}
+                >
                   forget your password ?
                 </Link>
                 <button

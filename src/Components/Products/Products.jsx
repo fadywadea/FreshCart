@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { ThreeDots } from "react-loader-spinner";
@@ -14,33 +14,27 @@ export default function SectionProducts() {
     let response = await addToCart(id);
 
     if (response.data?.status === "success") {
-      const notify = () => {
-        toast.success(response.data?.message.split(" ").slice(0, 3).join(" "), {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      };
-      notify();
+      toast.success(response.data?.message.split(" ").slice(0, 3).join(" "), {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } else {
-      const notify = () => {
-        toast.error(response.data?.message, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      };
-      notify();
+      toast.error(response.data?.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   }
 
@@ -50,16 +44,15 @@ export default function SectionProducts() {
 
   let { isLoading, data } = useQuery("featuredProducts", getFeaturedProducts);
 
-  useEffect(() => {
-    getFeaturedProducts();
-  }, []);
-
   return (
     <>
       <Helmet>
-        <meta name="description" content="Web site created using create-react-app" />
+        <meta
+          name="description"
+          content="Web site created using create-react-app"
+        />
         <meta name="keywords" content="HTML5 CSS3 Bootstrap JS React" />
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <title>Products</title>
